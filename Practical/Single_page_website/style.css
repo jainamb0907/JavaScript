@@ -8,6 +8,11 @@ body {
   text-align: center;
 }
 
+.logo {
+  width: "43px";
+  height: "34px";
+}
+
 #map {
   width: 100%;
   height: 400px;
