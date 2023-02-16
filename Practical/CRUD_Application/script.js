@@ -48,8 +48,19 @@ function validateForm() {
   return true;
 }
 
+var inputBox = document.getElementById("pp");
+
+var invalidChars = ["-", "+", "E", "e"];
+
+inputBox.addEventListener("keydown", function (e) {
+  if (invalidChars.includes(e.key)) {
+    e.preventDefault();
+  }
+});
+
 //function to show data from local storage
 function showData() {
+  pid.disabled = false;
   var productlist;
   if (localStorage.getItem("productlist") == null) {
     productlist = [];
@@ -59,24 +70,17 @@ function showData() {
 
   var html = "";
   productlist.forEach(function (element, index) {
-    html += "<tr>";
-    html += "<td>" + element.pname + "</td>";
-    html += "<td>" + element.pid + "</td>";
-    // html += "<td>" + element.pi + "</td>";
-    html +=
-      "<td> <img src=" +
-      element.pi +
-      "style='height:100px; width:100px;' alt='Product Image' ></td>";
-    html += "<td>" + element.pd + "</td>";
-    html += "<td>" + element.pp + "</td>";
-    html +=
-      '<td><button onclick="deleteData(' +
-      index +
-      ')" class="btn btn-danger">Delete</button> <button onclick="updateData(' +
-      index +
-      ')" class="btn btn-warning m-2">Edit</button>  </td>';
-    html += "</tr>";
+    html += `<tr>
+                <td> ${element.pname} </td>
+                <td> ${element.pid} </td>
+                <td> <img src= "${element.pi}" style='height:100px; width:100px;' alt='Product Image'></td>
+                <td> ${element.pd} </td>
+                <td> ${element.pp} &#8377; </td>
+                <td> <button onclick="updateData(${index})" class="btn btn-warning m-2">Edit</button></td>
+                <td> <button onclick='deleteData(${index})' class="btn btn-danger">Delete</button></td>
+              </tr>`;
   });
+
   document.querySelector("#CRUDTable tbody").innerHTML = html;
 }
 
@@ -156,8 +160,9 @@ function deleteData(index) {
       Swal.fire("Deleted!", "Your entry has been deleted.", "success");
     }
   });
-
 }
+
+
 
 //function to update data from local storage
 function updateData(index) {
@@ -195,11 +200,7 @@ function updateData(index) {
         document.getElementById("pd").value = "";
         document.getElementById("pp").value = "";
         document.getElementById("imgedit").src = "";
-        Swal.fire(
-          'Congrats!',
-          'You changes has been saved',
-          'success'
-        )
+        Swal.fire("Congrats!", "You changes has been saved", "success");
 
         //update button will hide and submit button will show
         document.getElementById("submit").style.display = "block";
@@ -209,22 +210,6 @@ function updateData(index) {
       let pi = newimg.files[0];
       let reader = new FileReader();
       reader.readAsDataURL(pi);
-
-      // window.addEventListener("load", function () {
-      //   document
-      //     .querySelector('input[type="file"]')
-      //     .addEventListener("change", function () {
-      //       if (this.files && this.files[index]) {
-      //         var pi = document.querySelector("pi");
-      //         pi.src = URL.createObjectURL(this.files[index]);
-      //         pi.onload = piLoaded;
-      //       }
-      //     });
-      // });
-
-      // function piLoaded(e) {
-      //   alert(e);
-      // }
 
       reader.addEventListener("load", () => {
         url = reader.result;
@@ -242,22 +227,14 @@ function updateData(index) {
         document.getElementById("pd").value = "";
         document.getElementById("pp").value = "";
         document.getElementById("imgedit").src = "";
-        Swal.fire(
-          'Congrats!',
-          'You changes has been saved',
-          'success'
-        )
-
+        Swal.fire("Congrats!", "You changes has been saved", "success");
       });
 
+      //update button will hide and submit button will show
+      document.getElementById("submit").style.display = "block";
+      document.getElementById("update").style.display = "none";
     }
-    //update button will hide and submit button will show
-    document.getElementById("submit").style.display = "block";
-    document.getElementById("update").style.display = "none";
-    pid.disabled = false;
   };
-
-
 }
 
 //function to Sort and Filter data

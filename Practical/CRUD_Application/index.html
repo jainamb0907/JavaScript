@@ -190,9 +190,11 @@
           <div class="form-group col-md-6 mb-3">
             <label for="pp"><strong>Product Price</strong></label>
             <input
+              min="0"
+              onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))"
               type="number"
               name="pp"
-              class="form-control"
+              class="form-control validate_price"
               id="pp"
               placeholder="Enter current product price"
             />
