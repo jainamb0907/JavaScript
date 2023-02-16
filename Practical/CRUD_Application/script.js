@@ -6,7 +6,6 @@ function validateForm() {
   var pd = document.getElementById("pd").value;
   var pp = document.getElementById("pp").value;
 
-
   if (pname == "" || pp == "" || pd == "") {
     alert("All fields are required!");
     return false;
@@ -114,6 +113,13 @@ function AddData() {
         pp: pp,
       });
       localStorage.setItem("productlist", JSON.stringify(productlist));
+      Swal.fire({
+        position: "top-end",
+        icon: "success",
+        title: "Your file has been added",
+        showConfirmButton: false,
+        timer: 1500,
+      });
       showData();
     });
 
@@ -122,6 +128,7 @@ function AddData() {
     document.getElementById("pi").value = "";
     document.getElementById("pd").value = "";
     document.getElementById("pp").value = "";
+    document.getElementById("imgedit").src = "";
   }
 }
 
@@ -133,10 +140,23 @@ function deleteData(index) {
   } else {
     productlist = JSON.parse(localStorage.getItem("productlist"));
   }
+  Swal.fire({
+    title: "Are you sure?",
+    text: "You won't be able to revert this!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Yes, delete it!",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      productlist.splice(index, 1);
+      localStorage.setItem("productlist", JSON.stringify(productlist));
+      showData();
+      Swal.fire("Deleted!", "Your entry has been deleted.", "success");
+    }
+  });
 
-  productlist.splice(index, 1);
-  localStorage.setItem("productlist", JSON.stringify(productlist));
-  showData();
 }
 
 //function to update data from local storage
@@ -152,31 +172,34 @@ function updateData(index) {
   } else {
     productlist = JSON.parse(localStorage.getItem("productlist"));
   }
-
+  pid.disabled = true;
   document.getElementById("pname").value = productlist[index].pname;
   document.getElementById("pid").value = productlist[index].pid;
   document.getElementById("imgedit").src = productlist[index].pi;
   document.getElementById("pd").value = productlist[index].pd;
   document.getElementById("pp").value = productlist[index].pp;
 
-  pid.disabled = true;
-
   document.querySelector("#update").onclick = function () {
     if (newimg.value == "") {
       if (validateForm() == true) {
         productlist[index].pname = document.getElementById("pname").value;
-        // productlist[index].pid = document.getElementById("pid").value;
-        // productlist[index].pi = document.getElementById("pi").value;
         productlist[index].pd = document.getElementById("pd").value;
         productlist[index].pp = document.getElementById("pp").value;
 
         localStorage.setItem("productlist", JSON.stringify(productlist));
         showData();
+
         document.getElementById("pname").value = "";
         document.getElementById("pid").value = "";
         document.getElementById("pi").value = "";
         document.getElementById("pd").value = "";
         document.getElementById("pp").value = "";
+        document.getElementById("imgedit").src = "";
+        Swal.fire(
+          'Congrats!',
+          'You changes has been saved',
+          'success'
+        )
 
         //update button will hide and submit button will show
         document.getElementById("submit").style.display = "block";
@@ -212,17 +235,29 @@ function updateData(index) {
 
         localStorage.setItem("productlist", JSON.stringify(productlist));
         showData();
+
         document.getElementById("pname").value = "";
         document.getElementById("pid").value = "";
         document.getElementById("pi").value = "";
         document.getElementById("pd").value = "";
         document.getElementById("pp").value = "";
+        document.getElementById("imgedit").src = "";
+        Swal.fire(
+          'Congrats!',
+          'You changes has been saved',
+          'success'
+        )
+
       });
-      //update button will hide and submit button will show
-      document.getElementById("submit").style.display = "block";
-      document.getElementById("update").style.display = "none";
+
     }
+    //update button will hide and submit button will show
+    document.getElementById("submit").style.display = "block";
+    document.getElementById("update").style.display = "none";
+    pid.disabled = false;
   };
+
+
 }
 
 //function to Sort and Filter data
@@ -307,7 +342,7 @@ function searchById() {
   tr = table.getElementsByTagName("tr");
   for (i = 0; i < tr.length; i++) {
     for (j = 0; j <= i; j++) {
-      td = tr[j].getElementsByTagName("td")[0];
+      td = tr[j].getElementsByTagName("td")[1];
       if (td) {
         txtValue = td.innerText;
         if (txtValue.indexOf(filter) > -1) {
