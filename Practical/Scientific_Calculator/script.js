@@ -23,14 +23,22 @@ function display(val) {
   }
 
   if (
-    (val === "+" || val === "-" || val === "*" || val === "/") &&
+    (val === "+" ||
+      val === "-" ||
+      val === "*" ||
+      val === "/" ||
+      val === "**") &&
     operator === false
   ) {
     return;
   }
   // check first value is oprator
   if (
-    (val === "+" || val === "-" || val === "*" || val === "/") &&
+    (val === "+" ||
+      val === "-" ||
+      val === "*" ||
+      val === "/" ||
+      val === "**") &&
     operator === true
   ) {
     operator = false;
@@ -50,7 +58,11 @@ function display(val) {
     console.log(val, "Second isCalculated" + isCalculated);
     result.value += val;
   } else if (
-    (val === "+" || val === "-" || val === "*" || val === "/") &&
+    (val === "+" ||
+      val === "-" ||
+      val === "*" ||
+      val === "/" ||
+      val === "**") &&
     isCalculated === true
   ) {
     result.value += val;
@@ -208,12 +220,6 @@ function solve() {
 
   return y;
 }
-
-// Wait for page to be fully loaded
-window.addEventListener("load", function () {
-  // Attach on-click
-  document.getElementById("**").addEventListener("click", doSomething);
-});
 
 function backspace() {
   document.getElementById("result").value = result.value.slice(0, -1);
